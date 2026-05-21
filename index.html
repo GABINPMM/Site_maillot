@@ -15,6 +15,9 @@
 
   <!-- CSS personnalisé -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Leaflet Map CSS (interactivité mondiale) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 
 <body>
@@ -98,6 +101,24 @@
             Joueurs Favoris
           </button>
         </li>
+        <li role="none">
+          <button
+            class="nav-btn"
+            id="onglet-carte"
+            role="tab"
+            aria-selected="false"
+            aria-controls="section-carte"
+            data-tab="carte"
+          >
+            <!-- SVG Boussole / Carte (remplace emoji 🗺️) -->
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
+              <line x1="9" y1="3" x2="9" y2="18"/>
+              <line x1="15" y1="6" x2="15" y2="21"/>
+            </svg>
+            Carte Mondiale
+          </button>
+        </li>
       </ul>
 
       <!-- Statistiques rapides (droite) -->
@@ -167,21 +188,20 @@
   >
     <div class="section-head">
       <div>
-        <p class="section-label">Maillots convoités</p>
+        <p class="section-label">Clubs convoités</p>
         <h2 class="section-title">Liste de Souhaits</h2>
         <p class="section-desc">
-          Les futures acquisitions. Un recensement rigoureux des pièces recherchées pour compléter KitVault.
+          Ce ne sont pas des maillots précis que je recherche — ce sont les couleurs de ces clubs mythiques que je veux voir dans ma collection. Peu importe le modèle ou la saison, c'est l'écusson qui compte.
         </p>
       </div>
       <div class="section-meta" aria-label="Compteur wishlist">
         <div class="meta-number" id="meta-wishlist">0</div>
-        <div class="meta-label">Souhaités</div>
+        <div class="meta-label">Clubs visés</div>
       </div>
     </div>
 
     <!-- Grille Wishlist -->
     <div
-      class="jersey-grid"
       id="grille-wishlist"
       role="list"
       aria-label="Grille des maillots souhaités"
@@ -215,6 +235,31 @@
       role="list"
       aria-label="Liste des joueurs favoris"
     ></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION — CARTE INTERACTIVE MONDIALE
+  ══════════════════════════════════════════════════════ -->
+  <section
+    class="section"
+    id="section-carte"
+    role="tabpanel"
+    aria-labelledby="onglet-carte"
+  >
+    <div class="section-head">
+      <div>
+        <p class="section-label">Géographie de la passion</p>
+        <h2 class="section-title">Carte Mondiale</h2>
+        <p class="section-desc">
+          Explore la provenance de tes maillots. Clique sur un marqueur de club pour découvrir toutes les pièces associées à ce lieu mythique du football mondial.
+        </p>
+      </div>
+    </div>
+
+    <!-- Conteneur Carte stylisé -->
+    <div class="map-wrapper">
+      <div id="map" aria-label="Carte interactive mondiale de la collection"></div>
+    </div>
   </section>
 
 </div><!-- /#app -->
@@ -301,6 +346,8 @@
 
 <!-- Données -->
 <script src="data.js"></script>
+<!-- Leaflet Map JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <!-- Logique de l'application -->
 <script src="app.js"></script>
 

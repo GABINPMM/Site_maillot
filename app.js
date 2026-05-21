@@ -64,7 +64,77 @@ function numDos(n) { return n != null ? `N°${n}` : '—'; }
  * @param {Object} item Données du maillot
  * @param {string} mode 'collection' | 'wishlist'
  */
+function getTeamGlowColor(club) {
+  const c = club.toLowerCase();
+  if (c.includes('psg') || c.includes('paris')) return 'rgba(0, 65, 112, 0.4)';
+  if (c.includes('angers')) return 'rgba(255, 255, 255, 0.15)';
+  if (c.includes('bayern')) return 'rgba(220, 5, 45, 0.35)';
+  if (c.includes('madrid') || c.includes('real')) return 'rgba(254, 190, 16, 0.25)';
+  if (c.includes('milan')) return 'rgba(227, 6, 19, 0.3)';
+  if (c.includes('napoli') || c.includes('naples')) return 'rgba(18, 160, 215, 0.35)';
+  if (c.includes('france')) return 'rgba(15, 32, 75, 0.4)';
+  if (c.includes('arsenal')) return 'rgba(239, 1, 7, 0.35)';
+  if (c.includes('aston villa')) return 'rgba(149, 191, 229, 0.3)';
+  if (c.includes('bournemouth')) return 'rgba(181, 14, 18, 0.3)';
+  if (c.includes('brentford')) return 'rgba(227, 6, 19, 0.3)';
+  if (c.includes('brighton')) return 'rgba(0, 87, 184, 0.35)';
+  if (c.includes('chelsea')) return 'rgba(3, 70, 148, 0.4)';
+  if (c.includes('crystal palace')) return 'rgba(27, 69, 143, 0.3)';
+  if (c.includes('everton')) return 'rgba(0, 51, 153, 0.35)';
+  if (c.includes('fulham')) return 'rgba(255, 255, 255, 0.15)';
+  if (c.includes('ipswich')) return 'rgba(0, 0, 255, 0.35)';
+  if (c.includes('leicester')) return 'rgba(0, 48, 144, 0.35)';
+  if (c.includes('liverpool')) return 'rgba(200, 16, 46, 0.35)';
+  if (c.includes('manchester city') || c.includes('mancity')) return 'rgba(108, 171, 221, 0.4)';
+  if (c.includes('manchester united') || c.includes('manutd')) return 'rgba(218, 41, 28, 0.35)';
+  if (c.includes('newcastle')) return 'rgba(255, 255, 255, 0.15)';
+  if (c.includes('nottingham')) return 'rgba(221, 0, 0, 0.35)';
+  if (c.includes('southampton')) return 'rgba(215, 25, 32, 0.35)';
+  if (c.includes('tottenham')) return 'rgba(19, 34, 87, 0.4)';
+  if (c.includes('west ham')) return 'rgba(122, 38, 58, 0.35)';
+  if (c.includes('wolves') || c.includes('wolverhampton')) return 'rgba(253, 185, 19, 0.3)';
+  if (c.includes('betis')) return 'rgba(0, 150, 80, 0.35)';
+  if (c.includes('juventus')) return 'rgba(255, 255, 255, 0.15)';
+  if (c.includes('venezia')) return 'rgba(0, 115, 80, 0.35)';
+  if (c.includes('dortmund')) return 'rgba(253, 218, 0, 0.35)';
+  if (c.includes('monaco')) return 'rgba(227, 6, 19, 0.35)';
+  if (c.includes('porto')) return 'rgba(0, 90, 170, 0.35)';
+  return 'rgba(201, 168, 76, 0.2)'; // fallback gold glow
+}
+
 function htmlCarte(item, mode) {
+  if (mode === 'wishlist') {
+    const club = item.club || 'Club inconnu';
+    const ligue = item.ligue || '';
+    const glow = getTeamGlowColor(club);
+    
+    return `
+<article class="wishlist-card" id="wishlist-${item.id}" role="listitem" aria-label="${club}" style="--team-glow: ${glow}">
+  <div class="wishlist-badge" data-egg="badge" title="ID ${item.id}">ID ${item.id}</div>
+  <div class="wishlist-glow"></div>
+  
+  <div class="wishlist-crest-container">
+    <img
+      class="wishlist-crest"
+      src="assets/wishlist/${item.image}"
+      alt="Logo ${club}"
+      loading="lazy"
+      draggable="false"
+    />
+  </div>
+
+  <div class="wishlist-info">
+    <h3 class="wishlist-club-name" title="${club}">${club}</h3>
+    <div class="wishlist-meta">
+      <span class="wishlist-league-pill">${ligue}</span>
+    </div>
+  </div>
+  
+  <div class="wishlist-status-badge">Club Convoité</div>
+</article>`;
+  }
+
+  // Mode collection
   const nom    = item.nom    || `Maillot ${item.id}`;
   const club   = item.club   || 'Club inconnu';
   const saison = item.saison || '—';
@@ -72,30 +142,20 @@ function htmlCarte(item, mode) {
   const taille = item.taille || '—';
   const ligue  = item.ligue  || '';
 
-  // SVG de coeur épuré pour la wishlist
-  const badgeWish = mode === 'wishlist'
-    ? `<div class="card-wish" aria-label="Maillot souhaité">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-          <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/>
-        </svg>
-       </div>`
-    : '';
-
   const badgeEtat = item.etat
     ? `<div class="card-etat ${classeEtat(item.etat)}">${item.etat}</div>`
     : '';
 
-  const libelleBadge = mode === 'collection' ? `#${item.id}` : `ID ${item.id}`;
+  const libelleBadge = `#${item.id}`;
 
   return `
-<article class="jersey-card" id="${mode}-${item.id}" role="listitem" aria-label="${nom} — ${club}">
-  ${badgeWish}
+<article class="jersey-card" id="collection-${item.id}" role="listitem" aria-label="${nom} — ${club}">
   <div class="card-badge" data-egg="badge" title="Activer l'hologramme">${libelleBadge}</div>
 
   <div class="card-img-zone">
     <img
       class="card-img"
-      src="assets/${mode === 'collection' ? 'maillots' : 'wishlist'}/${item.image}"
+      src="assets/maillots/${item.image}"
       alt="${nom} ${club} ${saison}"
       loading="lazy"
       draggable="false"
@@ -134,6 +194,7 @@ function htmlCarte(item, mode) {
   ${badgeEtat}
 </article>`;
 }
+
 
 /**
  * HTML pour la vue plein écran (un maillot à la fois, géant et sublime)
@@ -385,7 +446,7 @@ async function afficherGrille(items, mode, gridId, badgeId, metaId) {
     return;
   }
 
-  // ── Mode collection : gérer les deux types d'affichage ──
+  // ── Mode collection : gérer l'affichage plein écran ──
   if (mode === 'collection') {
     const itemsExtraits = valides.map(v => v.item);
     window.validCollectionItems = itemsExtraits;
@@ -402,40 +463,36 @@ async function afficherGrille(items, mode, gridId, badgeId, metaId) {
       grille.classList.remove('hidden');
       if (fsContainer) fsContainer.classList.add('hidden');
     }
+  }
 
-    // Classer chaque maillot dans sa catégorie
-    const groupes = CATEGORIES_LIGUES.map(cat => ({ cat, items: [] }));
-    const déjàClassé = new Set();
+  // Classer chaque maillot dans sa catégorie
+  const groupes = CATEGORIES_LIGUES.map(cat => ({ cat, items: [] }));
+  const déjàClassé = new Set();
 
-    for (const cat of CATEGORIES_LIGUES) {
-      for (const v of valides) {
-        if (!déjàClassé.has(v.item.id) && cat.match(v.item.ligue || '')) {
-          groupes.find(g => g.cat.id === cat.id).items.push(v.item);
-          déjàClassé.add(v.item.id);
-        }
+  for (const cat of CATEGORIES_LIGUES) {
+    for (const v of valides) {
+      if (!déjàClassé.has(v.item.id) && cat.match(v.item.ligue || '')) {
+        groupes.find(g => g.cat.id === cat.id).items.push(v.item);
+        déjàClassé.add(v.item.id);
       }
     }
-
-    // Générer le HTML groupé
-    let html = '';
-    for (const g of groupes) {
-      if (g.items.length === 0) continue;
-      html += htmlCategorieHeader(g.cat, g.items.length);
-      html += g.items.map(item => htmlCarte(item, mode)).join('');
-      html += `</div></div>`; // Ferme jersey-grid + league-category
-    }
-    grille.innerHTML = html;
-
-  } else {
-    // Mode wishlist : affichage plat standard
-    grille.innerHTML = `<div class="jersey-grid">` + valides.map(v => htmlCarte(v.item, mode)).join('') + `</div>`;
   }
+
+  // Générer le HTML groupé
+  let html = '';
+  for (const g of groupes) {
+    if (g.items.length === 0) continue;
+    html += htmlCategorieHeader(g.cat, g.items.length);
+    html += g.items.map(item => htmlCarte(item, mode)).join('');
+    html += `</div></div>`; // Ferme jersey-grid + league-category
+  }
+  grille.innerHTML = html;
   
   // Associer les événements d'easter egg sur les badges ID
   grille.querySelectorAll('[data-egg="badge"]').forEach(badgeEl => {
     badgeEl.addEventListener('click', (e) => {
       e.stopPropagation();
-      const card = e.target.closest('.jersey-card');
+      const card = e.target.closest('.jersey-card, .wishlist-card');
       if (card) {
         card.classList.add('hologram-active');
         setTimeout(() => {
@@ -444,6 +501,7 @@ async function afficherGrille(items, mode, gridId, badgeId, metaId) {
       }
     });
   });
+
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -558,7 +616,6 @@ function changerOnglet(nom) {
     sec.classList.toggle('active', sec.id === `section-${nom}`);
   });
 
-  // Rendu différé (Lazy-loading) pour optimiser les performances
   if (nom === 'wishlist' && !état.renduWishlist) {
     état.renduWishlist = true;
     afficherGrille(WISHLIST, 'wishlist', 'grille-wishlist', 'badge-wishlist', 'meta-wishlist');
@@ -567,6 +624,10 @@ function changerOnglet(nom) {
   if (nom === 'joueurs' && !état.renduJoueurs) {
     état.renduJoueurs = true;
     afficherJoueurs('grille-joueurs');
+  }
+
+  if (nom === 'carte') {
+    initialiserCarteInteractive();
   }
 }
 
@@ -942,7 +1003,7 @@ const EasterEggs = {
     // Notification visuelle
     const logo = document.querySelector('.brand-logo');
     const header = document.querySelector('.navbar');
-    const cards = document.querySelectorAll('.jersey-card, .player-card');
+    const cards = document.querySelectorAll('.jersey-card, .wishlist-card, .player-card');
 
     if (logo) logo.classList.add('overdrive-pulse');
     if (header) header.classList.add('overdrive-pulse');
@@ -954,7 +1015,7 @@ const EasterEggs = {
     setTimeout(() => {
       if (logo) logo.classList.remove('overdrive-pulse');
       if (header) header.classList.remove('overdrive-pulse');
-      document.querySelectorAll('.jersey-card, .player-card').forEach(c => {
+      document.querySelectorAll('.jersey-card, .wishlist-card, .player-card').forEach(c => {
         c.classList.remove('overdrive-card');
       });
     }, 6000);
@@ -978,3 +1039,227 @@ document.addEventListener('DOMContentLoaded', () => {
   // Chargement premier écran (Ma Collection en premier plan)
   afficherGrille(COLLECTION, 'collection', 'grille-collection', 'badge-collection', 'meta-collection');
 });
+
+/* ══════════════════════════════════════════════════════════════
+   CARTE INTERACTIVE MONDIALE (LEAFLET + COORDONNÉES DES CLUBS)
+══════════════════════════════════════════════════════════════ */
+
+// Base de données géographiques précises pour localiser les clubs de ta collection (stades ou capitales)
+const COORDONNEES_CLUBS = {
+  "Angers SCO":          [47.4602, -0.5302],   // Stade Raymond-Kopa
+  "Arsenal":             [51.5549, -0.1084],   // Emirates Stadium
+  "Aston Villa":         [52.5091, -1.8848],   // Villa Park
+  "Paris Saint-Germain": [48.8414, 2.2530],    // Parc des Princes
+  "Newcastle United":    [54.9756, -1.6217],   // St. James' Park
+  "Brésil":              [-22.9122, -43.2302],  // Stade Maracanã (Rio)
+  "Atlético Madrid":     [40.4362, -3.5995],   // Cívitas Metropolitano
+  "AC Milan":            [45.4781, 9.1240],    // San Siro
+  "Inter Milan":         [45.4781, 9.1240],    // San Siro
+  "Ajax Amsterdam":      [52.3142, 4.9419],    // Johan Cruyff ArenA
+  "Everton":             [53.4388, -2.9664],   // Goodison Park
+  "Italie":              [41.9341, 12.4547],   // Stadio Olimpico (Rome)
+  "France":              [48.9244, 2.3600],    // Stade de France
+  "Manchester United":   [53.4631, -2.2913],   // Old Trafford
+  "Real Madrid":         [40.4531, -3.6883],   // Santiago Bernabéu
+  "Ins'Shatta":          [48.8566, 2.3522]     // Paris (custom)
+};
+
+// Variables globales carte
+let carteLeaflet = null;
+let marqueursCarte = [];
+window.popupSliderIndices = {}; // Indices courants des sliders des popups par club
+
+function initialiserCarteInteractive() {
+  if (carteLeaflet) {
+    // Si déjà initialisée, forcer Leaflet à recalculer sa taille pour éviter les affichages gris/tronqués
+    setTimeout(() => {
+      carteLeaflet.invalidateSize();
+    }, 100);
+    return;
+  }
+
+  // Initialisation de la carte, centrée par défaut sur l'Europe occidentale
+  carteLeaflet = L.map('map', {
+    zoomControl: true,
+    attributionControl: false
+  }).setView([46.5, 2.2], 4);
+
+  // Ajout du fond de carte sombre satiné CartoDB Dark Matter
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18,
+    minZoom: 2
+  }).addTo(carteLeaflet);
+
+  // Génération des pins de clubs
+  genererMarqueursCarte();
+}
+
+function genererMarqueursCarte() {
+  if (!carteLeaflet) return;
+
+  // Nettoyer d'éventuels marqueurs existants
+  marqueursCarte.forEach(m => carteLeaflet.removeLayer(m));
+  marqueursCarte = [];
+
+  // Récupérer les maillots valides (ceux dont l'image existe physiquement)
+  const maillotsValides = window.validCollectionItems && window.validCollectionItems.length > 0
+    ? window.validCollectionItems
+    : COLLECTION.filter(item => item.club && item.image);
+
+  // Regrouper les maillots par club
+  const clubsGroupes = {};
+  maillotsValides.forEach(item => {
+    const club = item.club;
+    if (!club) return;
+    if (!clubsGroupes[club]) {
+      clubsGroupes[club] = [];
+    }
+    clubsGroupes[club].push(item);
+  });
+
+  // Créer un marqueur par club
+  Object.keys(clubsGroupes).forEach(club => {
+    const coords = COORDONNEES_CLUBS[club];
+    if (!coords) {
+      console.warn(`Coordonnées géographiques introuvables pour le club: ${club}`);
+      return;
+    }
+
+    const listeMaillots = clubsGroupes[club];
+
+    // Créer une icône de pulsar néon haut de gamme personnalisée
+    const customIcon = L.divIcon({
+      html: `
+        <div class="custom-map-marker" title="${club} — ${listeMaillots.length} maillot${listeMaillots.length > 1 ? 's' : ''}">
+          <div class="marker-pulse"></div>
+          <div class="marker-pin"></div>
+        </div>
+      `,
+      className: 'leaflet-custom-marker',
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
+    });
+
+    // Créer le marqueur
+    const marqueur = L.marker(coords, { icon: customIcon }).addTo(carteLeaflet);
+
+    // Lier le popup Leaflet personnalisé
+    marqueur.bindPopup(() => créerPopupContent(club, listeMaillots), {
+      maxWidth: 320,
+      minWidth: 290
+    });
+
+    marqueursCarte.push(marqueur);
+  });
+}
+
+function créerPopupContent(club, maillots) {
+  if (window.popupSliderIndices[club] === undefined) {
+    window.popupSliderIndices[club] = 0;
+  }
+
+  const index = window.popupSliderIndices[club];
+  const item = maillots[index];
+  const total = maillots.length;
+
+  const nom    = item.nom    || `Maillot ${item.id}`;
+  const saison = item.saison || '—';
+  const joueur = item.joueur || '—';
+  const numero = item.numero != null ? `N°${item.numero}` : '—';
+  const ligue  = item.ligue  || '';
+
+  // Commandes de défilement uniquement si plusieurs maillots partagent le même club
+  const controls = total > 1
+    ? `
+      <div class="map-popup-controls">
+        <button class="popup-nav-btn" onclick="window.changerMaillotPopup('${club.replace(/'/g, "\\'")}', -1)">
+          ◀ Précédent
+        </button>
+        <button class="popup-nav-btn" onclick="window.changerMaillotPopup('${club.replace(/'/g, "\\'")}', 1)">
+          Suivant ▶
+        </button>
+      </div>
+    `
+    : '';
+
+  return `
+<div class="map-popup-container" id="popup-content-${club.replace(/[^a-zA-Z0-9]/g, '-')}">
+  <div class="map-popup-header">
+    <div class="map-popup-title">${club}</div>
+    <div class="map-popup-count">${index + 1} / ${total}</div>
+  </div>
+
+  <div class="map-popup-slider">
+    <div class="map-popup-img-zone">
+      <img class="map-popup-img" src="assets/maillots/${item.image}" alt="${nom}" />
+    </div>
+    <div class="map-popup-info">
+      <div class="map-popup-jname">${nom}</div>
+      <div class="map-popup-jsaison">${saison}</div>
+      <div class="map-popup-jfields">
+        <span><strong>Joueur :</strong> ${joueur}</span>
+        <span><strong>Dossard :</strong> ${numero}</span>
+        <span><strong>Ligue :</strong> ${ligue || '—'}</span>
+      </div>
+    </div>
+  </div>
+
+  ${controls}
+
+  <button class="popup-action-btn" onclick="window.popupVoirMaillot(${item.id})">
+    🔍 Découvrir dans la vitrine
+  </button>
+</div>
+`;
+}
+
+// Enregistrement des callbacks globaux pour le popup HTML
+window.changerMaillotPopup = function(club, direction) {
+  const maillots = (window.validCollectionItems && window.validCollectionItems.length > 0
+    ? window.validCollectionItems
+    : COLLECTION).filter(item => item.club === club);
+
+  if (maillots.length <= 1) return;
+
+  let index = window.popupSliderIndices[club] || 0;
+  index = (index + direction + maillots.length) % maillots.length;
+  window.popupSliderIndices[club] = index;
+
+  const containerId = `popup-content-${club.replace(/[^a-zA-Z0-9]/g, '-')}`;
+  const popupElement = document.getElementById(containerId);
+  if (popupElement) {
+    const parentPopup = popupElement.closest('.leaflet-popup-content');
+    if (parentPopup) {
+      parentPopup.innerHTML = créerPopupContent(club, maillots);
+    }
+  }
+};
+
+window.popupVoirMaillot = function(id) {
+  if (carteLeaflet) {
+    carteLeaflet.closePopup();
+  }
+
+  // Basculer sur l'onglet Ma Collection
+  changerOnglet('collection');
+
+  // Si on est en mode plein écran, forcer le mode grille normal pour localiser la carte du maillot
+  if (état.modeAffichage === 'fullscreen') {
+    état.modeAffichage = 'normal';
+    localStorage.setItem('kv-mode-affichage', 'normal');
+    Customizer.configurerUI();
+    afficherGrille(COLLECTION, 'collection', 'grille-collection', 'badge-collection', 'meta-collection');
+  }
+
+  // Scroller de façon fluide jusqu'à la carte de maillot et déclencher un éclat d'accent doré
+  setTimeout(() => {
+    const element = document.getElementById(`collection-${id}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.classList.add('pulse-highlight');
+      setTimeout(() => {
+        element.classList.remove('pulse-highlight');
+      }, 3000);
+    }
+  }, 350);
+};
