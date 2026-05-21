@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>KitVault — Collection Privée de Maillots</title>
+  <meta name="description" content="Vitrine personnelle et interactive de ma collection de maillots de football. Edition moderne sans artifice." />
+  <meta name="theme-color" content="#0d0d0f" />
+
+  <!-- Polices Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- CSS personnalisé -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+<div id="app">
+
+  <!-- ══════════════════════════════════════════════════════
+       BARRE DE NAVIGATION FIXE
+  ══════════════════════════════════════════════════════ -->
+  <header role="banner">
+    <nav class="navbar" aria-label="Navigation principale">
+
+      <!-- Logo & Drapeau Français -->
+      <div class="brand-container">
+        <!-- Petit Drapeau Français Elegant -->
+        <div class="french-flag-badge" title="Collection Française">
+          <span class="flag-stripe blue"></span>
+          <span class="flag-stripe white"></span>
+          <span class="flag-stripe red"></span>
+        </div>
+        
+        <a href="#" class="brand" id="brand-logo-trigger" aria-label="Retour à l'accueil">
+          <div class="brand-logo" aria-hidden="true">
+            <!-- Icone de bouclier minimaliste SVG (remplace emoji ⚽) -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <span class="brand-name">Kit<span>Vault</span></span>
+        </a>
+      </div>
+
+      <!-- Onglets centrés (sans Emojis) -->
+      <ul class="nav-tabs" role="tablist" aria-label="Sections du site">
+        <li role="none">
+          <button
+            class="nav-btn active"
+            id="onglet-collection"
+            role="tab"
+            aria-selected="true"
+            aria-controls="section-collection"
+            data-tab="collection"
+          >
+            <!-- SVG Maillot (remplace emoji 👕) -->
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.38 3.46L16 1.7a2 2 0 0 0-1.48 0l-4.42 1.76a2 2 0 0 1-1.48 0L4.2 1.7A2 2 0 0 0 1.5 3.5v5.8a2 2 0 0 0 1 1.73l6 3.47a2 2 0 0 1 1 1.73V22a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-5.8a2 2 0 0 1 1-1.73l6-3.47a2 2 0 0 0 1-1.73V3.5a2 2 0 0 0-2.12-2.04z"/>
+            </svg>
+            Ma Collection
+            <span class="nav-count" id="badge-collection" aria-label="Nombre de maillots dans la collection">0</span>
+          </button>
+        </li>
+        <li role="none">
+          <button
+            class="nav-btn"
+            id="onglet-wishlist"
+            role="tab"
+            aria-selected="false"
+            aria-controls="section-wishlist"
+            data-tab="wishlist"
+          >
+            <!-- SVG Coeur (remplace emoji ♥) -->
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            Liste de Souhaits
+            <span class="nav-count" id="badge-wishlist" aria-label="Nombre de maillots souhaités">0</span>
+          </button>
+        </li>
+        <li role="none">
+          <button
+            class="nav-btn"
+            id="onglet-joueurs"
+            role="tab"
+            aria-selected="false"
+            aria-controls="section-joueurs"
+            data-tab="joueurs"
+          >
+            <!-- SVG Etoile (remplace emoji ⭐) -->
+            <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            Joueurs Favoris
+          </button>
+        </li>
+      </ul>
+
+      <!-- Statistiques rapides (droite) -->
+      <div class="nav-right" aria-label="Statistiques de la collection">
+        <div class="nav-stat">
+          <span class="nav-stat-val" id="nav-total">0</span>
+          <span class="nav-stat-lbl">Maillots</span>
+        </div>
+        <div class="nav-divider" aria-hidden="true"></div>
+        <div class="nav-stat">
+          <span class="nav-stat-val" id="nav-wishlist">0</span>
+          <span class="nav-stat-lbl">Souhaités</span>
+        </div>
+      </div>
+
+    </nav>
+  </header>
+  <!-- /NAVBAR -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION — MA COLLECTION
+  ══════════════════════════════════════════════════════ -->
+  <section
+    class="section active"
+    id="section-collection"
+    role="tabpanel"
+    aria-labelledby="onglet-collection"
+  >
+    <div class="section-head">
+      <div>
+        <p class="section-label">Vitrine personnelle</p>
+        <h1 class="section-title">Ma Collection</h1>
+        <p class="section-desc">
+          Chaque maillot raconte une histoire. Passe la souris sur une carte pour découvrir tous les détails de mes pièces d'exception.
+        </p>
+      </div>
+      <div class="section-meta" aria-label="Compteur total">
+        <div class="meta-number" id="meta-collection">0</div>
+        <div class="meta-label">Maillots</div>
+      </div>
+    </div>
+
+    <!-- Grille Collection (groupée par ligue) -->
+    <div
+      id="grille-collection"
+      role="list"
+      aria-label="Grille de la collection de maillots"
+    ></div>
+
+    <!-- Plein Écran (un maillot par un maillot) -->
+    <div
+      id="fullscreen-collection"
+      class="fullscreen-slider-container hidden"
+    ></div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION — LISTE DE SOUHAITS
+  ══════════════════════════════════════════════════════ -->
+  <section
+    class="section"
+    id="section-wishlist"
+    role="tabpanel"
+    aria-labelledby="onglet-wishlist"
+  >
+    <div class="section-head">
+      <div>
+        <p class="section-label">Maillots convoités</p>
+        <h2 class="section-title">Liste de Souhaits</h2>
+        <p class="section-desc">
+          Les futures acquisitions. Un recensement rigoureux des pièces recherchées pour compléter KitVault.
+        </p>
+      </div>
+      <div class="section-meta" aria-label="Compteur wishlist">
+        <div class="meta-number" id="meta-wishlist">0</div>
+        <div class="meta-label">Souhaités</div>
+      </div>
+    </div>
+
+    <!-- Grille Wishlist -->
+    <div
+      class="jersey-grid"
+      id="grille-wishlist"
+      role="list"
+      aria-label="Grille des maillots souhaités"
+    ></div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION — JOUEURS FAVORIS
+  ══════════════════════════════════════════════════════ -->
+  <section
+    class="section"
+    id="section-joueurs"
+    role="tabpanel"
+    aria-labelledby="onglet-joueurs"
+  >
+    <div class="section-head">
+      <div>
+        <p class="section-label">Mes références</p>
+        <h2 class="section-title">Joueurs Favoris</h2>
+        <p class="section-desc">
+          Sélection exclusive des athlètes professionnels dont le talent et l'engagement inspirent cette collection.
+        </p>
+      </div>
+    </div>
+
+    <!-- Grille Joueurs -->
+    <div
+      class="players-grid"
+      id="grille-joueurs"
+      role="list"
+      aria-label="Liste des joueurs favoris"
+    ></div>
+  </section>
+
+</div><!-- /#app -->
+
+<!-- ══════════════════════════════════════════════════════
+     PANNEAU DE PERSONNALISATION INTERACTIF
+══════════════════════════════════════════════════════ -->
+<aside id="customizer-panel" class="customizer-panel" aria-label="Personnalisation du thème">
+  <div class="customizer-header">
+    <h3>Personnalisation</h3>
+    <button id="close-customizer" class="close-customizer" aria-label="Fermer le panneau">&times;</button>
+  </div>
+  <div class="customizer-body">
+    
+    <!-- Section Couleur d'Accent -->
+    <div class="customizer-section">
+      <h4 class="customizer-title-section">Teinte d'Accentuation</h4>
+      <div class="color-presets">
+        <button class="color-preset active" data-color="#c9a84c" style="background: #c9a84c;" title="Or Impérial"></button>
+        <button class="color-preset" data-color="#3b82f6" style="background: #3b82f6;" title="Bleu Cyber"></button>
+        <button class="color-preset" data-color="#10b981" style="background: #10b981;" title="Vert Jade"></button>
+        <button class="color-preset" data-color="#ec4899" style="background: #ec4899;" title="Rose Néon"></button>
+        <button class="color-preset" data-color="#a855f7" style="background: #a855f7;" title="Améthyste"></button>
+      </div>
+      <div class="custom-color-picker-container">
+        <span>Couleur libre :</span>
+        <input type="color" id="accent-color-picker" value="#c9a84c">
+      </div>
+    </div>
+
+    <!-- Section Couleur de Fond -->
+    <div class="customizer-section">
+      <h4 class="customizer-title-section">Ambiance de Fond</h4>
+      <div class="theme-presets">
+        <button class="theme-preset active" data-bg="#0d0d0f" data-surf="#131318" data-surf2="#1a1a22" style="background: #131318;">Asphalte</button>
+        <button class="theme-preset" data-bg="#050811" data-surf="#0b1120" data-surf2="#121b30" style="background: #0b1120;">Abysse</button>
+        <button class="theme-preset" data-bg="#0c0712" data-surf="#130b20" data-surf2="#1b102c" style="background: #130b20;">Nébuleuse</button>
+        <button class="theme-preset" data-bg="#070c08" data-surf="#0c140d" data-surf2="#121f14" style="background: #0c140d;">Forêt</button>
+      </div>
+    </div>
+
+    <!-- Section Mode de Vue -->
+    <div class="customizer-section">
+      <h4 class="customizer-title-section">Mode d'affichage</h4>
+      <div class="theme-presets">
+        <button class="view-preset active" id="view-normal-btn" data-view="normal">Normal</button>
+        <button class="view-preset" id="view-fullscreen-btn" data-view="fullscreen">Plein Écran</button>
+      </div>
+    </div>
+
+    <!-- Section Effets -->
+    <div class="customizer-section">
+      <h4 class="customizer-title-section">Effets Visuels</h4>
+      <div class="toggle-control">
+        <span>Animations fluides</span>
+        <label class="switch">
+          <input type="checkbox" id="animations-toggle" checked>
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-control mt-3">
+        <span>Effet Glassmorphism</span>
+        <label class="switch">
+          <input type="checkbox" id="glass-toggle" checked>
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <button id="reset-customizer" class="reset-btn">Valeurs par défaut</button>
+  </div>
+</aside>
+
+<!-- Bouton Flottant d'Ouverture du Thème (Remplacement de l'emoji par un SVG) -->
+<button id="open-customizer-btn" class="floating-config-btn" title="Personnaliser l'apparence" aria-label="Ouvrir la personnalisation">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+  </svg>
+</button>
+
+<!-- Canvas caché pour l'Easter Egg d'animation de confettis -->
+<canvas id="easteregg-canvas" style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;"></canvas>
+
+<!-- Données -->
+<script src="data.js"></script>
+<!-- Logique de l'application -->
+<script src="app.js"></script>
+
+</body>
+</html>
